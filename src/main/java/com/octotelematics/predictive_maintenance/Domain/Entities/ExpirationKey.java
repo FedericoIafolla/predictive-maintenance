@@ -9,19 +9,19 @@ import java.util.UUID;
 public class ExpirationKey {
     private UUID id;
     private String type;
-    private String piece;
+    private VehiclePartKey piece;
 
-    private ExpirationKey(UUID id, String type, String piece) {
+    private ExpirationKey(UUID id, String type, VehiclePartKey piece) {
         this.id = id;
         this.type = type;
         this.piece = piece;
     }
 
-    public static ExpirationKey of(UUID id, String type, String piece) {
+    public static ExpirationKey of(UUID id, String type, VehiclePartKey piece) {
         return new ExpirationKey(id, type, piece);
     }
 
-    public static ExpirationKey createNew(String type, String piece) {
+    public static ExpirationKey createNew(String type, VehiclePartKey piece) {
         return new ExpirationKey(null, type, piece);
     }
 }
