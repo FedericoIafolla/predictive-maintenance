@@ -1,7 +1,9 @@
 package com.octotelematics.predictive_maintenance.Domain.UseCases;
 
+import com.octotelematics.predictive_maintenance.Application.VehicleAggregateDto;
 import com.octotelematics.predictive_maintenance.Application.VehicleAggregateRepository;
 import com.octotelematics.predictive_maintenance.Domain.Entities.*;
+import com.octotelematics.predictive_maintenance.Domain.Mapping.VehicleAggregateMapper;
 import com.octotelematics.predictive_maintenance.Interface.Dto.PartDto;
 import com.octotelematics.predictive_maintenance.Interface.Dto.VehicleDto;
 
@@ -13,18 +15,18 @@ import java.util.UUID;
 public class AddVehiclePartUseCase {
     public static void execute(VehicleDto dto, VehicleAggregateRepository repo) {
         // step 1: leggi lista aggregati
-        Map<Integer, VehicleAggregate> aggregates = repo.loadAll();
+        Map<Integer, VehicleAggregateDto> aggregates = repo.loadAll();
         // step 2: ricerco in base all'id del veicolo
-        Map.Entry<Integer, VehicleAggregate> entry = aggregates.entrySet()  // ⇦ stream sugli entry
+        Map.Entry<Integer, VehicleAggregateDto> entry = aggregates.entrySet()  // ⇦ stream sugli entry
                 .stream()
                 .filter(e ->
-                        e.getValue().getKey().getChassisNumber().equals(dto.getChassisNumber()) &&
-                                e.getValue().getKey().getPlate().equals(dto.getPlate()))
+                        e.getValue().key().chassisNumber().equals(dto.getChassisNumber()) &&
+                                e.getValue().key().plate().equals(dto.getPlate()))
                 .findFirst()
                 .orElseThrow(() -> new RuntimeException("Vehicle not found"));
 
         int id = entry.getKey();                 // id del veicolo trovato
-        VehicleAggregate aggregate = entry.getValue();  // oggetto VehicleAggregate
+        VehicleAggregate aggregate = VehicleAggregateMapper.map(entry.getValue());  // oggetto VehicleAggregate
         // step 3: aggiungo la parte
 
         for (PartDto part : dto.getVehicleParts()) {

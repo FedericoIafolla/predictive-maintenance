@@ -1,8 +1,10 @@
 package com.octotelematics.predictive_maintenance.Interface.Api;
 
 import com.octotelematics.predictive_maintenance.Application.VehicleAggregateRepository;
+import com.octotelematics.predictive_maintenance.Domain.Entities.VehicleAggregate;
 import com.octotelematics.predictive_maintenance.Domain.UseCases.CreateVehicleUseCase;
 
+import com.octotelematics.predictive_maintenance.Domain.UseCases.ReadVehicleAggregate;
 import com.octotelematics.predictive_maintenance.Interface.Dto.VehicleDto;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,6 +19,11 @@ public class VehicleController {
     @PostMapping
     public void createVehicle(@RequestBody VehicleDto dto) {
         CreateVehicleUseCase.execute(dto, repo);
+    }
+
+    @GetMapping
+    public List<VehicleAggregate> getAllVehicles() {
+        return ReadVehicleAggregate.execute(repo);
     }
 
 }

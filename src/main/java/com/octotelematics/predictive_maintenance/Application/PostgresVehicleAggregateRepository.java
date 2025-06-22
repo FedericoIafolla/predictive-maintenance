@@ -24,18 +24,18 @@ public class PostgresVehicleAggregateRepository implements VehicleAggregateRepos
     }
 
     @Override
-    public Map<Integer, VehicleAggregate> loadAll() {
-        final String sql = "SELECT id, json FROM Elis_tab WHERE user = ?";
+    public Map<Integer, VehicleAggregateDto> loadAll() {
+        final String sql = "SELECT id, json FROM \"Elis_tab\" WHERE \"user\" = ?";
 
         // ResultSetExtractor permette di costruire qualunque struttura di ritorno.
         return jdbc.query(sql, ps -> ps.setString(1, "Federico"), rs -> {
-            Map<Integer, VehicleAggregate> map = new LinkedHashMap<>();   // mantiene l’ordine del DB
+            Map<Integer, VehicleAggregateDto> map = new LinkedHashMap<>();   // mantiene l’ordine del DB
             while (rs.next()) {
                 int id = rs.getInt("id");
                 String json = rs.getString("json");
-                VehicleAggregate va = null;
+                VehicleAggregateDto va = null;
                 try {
-                    va = mapper.readValue(json, VehicleAggregate.class);
+                    va = mapper.readValue(json, VehicleAggregateDto.class);
                 } catch (JsonProcessingException e) {
                     throw new RuntimeException(e);
                 }
@@ -46,10 +46,10 @@ public class PostgresVehicleAggregateRepository implements VehicleAggregateRepos
     }
 
     @Override
-    public void saveAll(List<VehicleAggregate> aggregates, String username) {
+    public void saveAll(VehicleAggregate aggregates, String username) {
         try {
             String json = mapper.writeValueAsString(aggregates);
-            String sql = "INSERT INTO Elis_tab(json, user) VALUES (?::jsonb, ?)";
+            String sql = "INSERT INTO \"Elis_tab\"(json, \"user\") VALUES (?::jsonb, ?)";
             jdbc.update(sql, json, username);
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -58,7 +58,7 @@ public class PostgresVehicleAggregateRepository implements VehicleAggregateRepos
     @Override
     public void deleteAll(int id) {
         try {
-            String sql = "DELETE FROM Elis_tab WHERE id = ? AND user = 'Federico'";
+            String sql = "DELETE FROM \"Elis_tab\" WHERE id = ? AND \"user\" = 'Federico'";
             jdbc.update(sql, id);
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -68,8 +68,8 @@ public class PostgresVehicleAggregateRepository implements VehicleAggregateRepos
     @Override
     public void update(VehicleAggregate aggregate, int id) {
         try {
-            String json = mapper.writeValueAsString(Collections.singletonList(aggregate));
-            String sql = "UPDATE Elis_tab SET(json=?::jsonb) WHERE id = ? AND user = 'Federico'";
+            String json = mapper.writeValueAsString(aggregate);
+            String sql = "UPDATE \"Elis_tab\" SET(json=?::jsonb) WHERE id = ? AND \"user\" = 'Federico'";
             jdbc.update(sql, json, id);
         } catch (Exception e) {
             throw new RuntimeException(e);

@@ -21,4 +21,12 @@ public class Expiration {
     public ExpirationKey getKey() {
         return key;
     }
+
+    public int getMaxLimitKm() {
+        return maxLimitKm;
+    }
+
+    public int getWarningLimitKm() {
+        return warningLimitKm;
+    }
 }

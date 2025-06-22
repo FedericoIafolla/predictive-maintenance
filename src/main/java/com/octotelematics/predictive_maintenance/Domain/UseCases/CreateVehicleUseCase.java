@@ -54,6 +54,6 @@ public class CreateVehicleUseCase {
     );
 //        step 2
 //        salvo il veicolo (da paolo)
-        repo.saveAll(List.of(aggregate), "Federico");
+        repo.saveAll(aggregate, "Federico");
     }
 }

@@ -16,15 +16,15 @@ public class ExpirationDto {
         return warningLimitKm;
     }
 
-    public void setWarningLimitKm(int warningLimitKm) {
-        this.warningLimitKm = warningLimitKm;
-    }
-
     public int getMaxLimitKm() {
         return maxLimitKm;
     }
 
-    public void setMaxLimitKm(int maxLimitKm) {
-        this.maxLimitKm = maxLimitKm;
+    public String getType() {
+        return type;
+    }
+
+    public UUID getPartSerialNumber() {
+        return partSerialNumber;
     }
 }

@@ -6,8 +6,8 @@ import java.util.List;
 import java.util.Map;
 
 public interface VehicleAggregateRepository {
-    Map<Integer, VehicleAggregate> loadAll();
-    void saveAll(List<VehicleAggregate> aggregates, String username);
+    Map<Integer, VehicleAggregateDto> loadAll();
+    void saveAll(VehicleAggregate aggregates, String username);
     void update(VehicleAggregate aggregate, int id);
     void deleteAll(int id);
 }

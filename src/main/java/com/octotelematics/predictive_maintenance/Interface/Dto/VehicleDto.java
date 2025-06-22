@@ -28,4 +28,12 @@ public class VehicleDto {
     public String getBrand() {
         return brand;
     }
+
+    public UserDto getOwner() {
+        return owner;
+    }
+
+    public List<PartDto> getVehicleParts() {
+        return vehicleParts;
+    }
 }

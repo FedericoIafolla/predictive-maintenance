@@ -64,7 +64,7 @@ public class VehicleAggregate {
 
     public void updateExpiration(ExpirationKey expirationKey, Expiration newExpiration) {
         VehiclePart part = this.vehicleParts.stream()
-                .filter(vp -> vp.getExpiration().getKey().getGianni().equals(expirationKey.getGianni()))
+                .filter(vp -> vp.getExpiration().getKey().gianni().equals(expirationKey.gianni()))
                 .findFirst()
                 .orElseThrow(() -> new IllegalArgumentException("VehiclePart not found for expiration update"));
 
