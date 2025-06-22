@@ -1,0 +1,319 @@
+openapi: 3.0.3
+info:
+  title: Predictive Maintenance API
+  description: |
+    REST API for managing vehicles, their parts and expiration thresholds – \
+    generated from the domain model in the *DevelopFede* branch of \
+    github.com/FedericoIafolla/predictive-maintenance.
+  version: 0.1.0
+servers:
+  - url: http://localhost:8080/api
+tags:
+  - name: Vehicles
+    description: Manage vehicles
+  - name: Vehicle Parts
+    description: Manage parts belonging to a vehicle
+  - name: Expiration
+    description: Manage expiration thresholds for a vehicle part
+paths:
+  /vehicles:
+    get:
+      summary: List all vehicles
+      tags: [Vehicles]
+      responses:
+        '200':
+          description: List of vehicles
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Vehicle'
+    post:
+      summary: Create a new vehicle
+      tags: [Vehicles]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VehicleCreate'
+      responses:
+        '201':
+          description: Newly created vehicle
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Vehicle'
+  /vehicles/{vehicleId}:
+    parameters:
+      - name: vehicleId
+        in: path
+        required: true
+        description: UUID of the vehicle (VehicleKey.id)
+        schema:
+          type: string
+          format: uuid
+    get:
+      summary: Get a vehicle by id
+      tags: [Vehicles]
+      responses:
+        '200':
+          description: Vehicle found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Vehicle'
+        '404':
+          description: Vehicle not found
+    put:
+      summary: Update an existing vehicle
+      tags: [Vehicles]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VehicleUpdate'
+      responses:
+        '200':
+          description: Vehicle updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Vehicle'
+    delete:
+      summary: Remove a vehicle
+      tags: [Vehicles]
+      responses:
+        '204':
+          description: Vehicle deleted
+  /vehicles/{vehicleId}/parts:
+    parameters:
+      - name: vehicleId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+    get:
+      summary: List parts of a vehicle
+      tags: [Vehicle Parts]
+      responses:
+        '200':
+          description: List of parts for the vehicle
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/VehiclePart'
+    post:
+      summary: Add a part to a vehicle
+      tags: [Vehicle Parts]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VehiclePartCreate'
+      responses:
+        '201':
+          description: Part created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VehiclePart'
+  /vehicles/{vehicleId}/parts/{partId}:
+    parameters:
+      - name: vehicleId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: partId
+        in: path
+        required: true
+        description: UUID of the part (VehiclePartKey.id)
+        schema:
+          type: string
+          format: uuid
+    get:
+      summary: Get vehicle part by id
+      tags: [Vehicle Parts]
+      responses:
+        '200':
+          description: Part found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VehiclePart'
+        '404':
+          description: Part not found
+    put:
+      summary: Update a vehicle part
+      tags: [Vehicle Parts]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VehiclePartUpdate'
+      responses:
+        '200':
+          description: Part updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VehiclePart'
+    delete:
+      summary: Remove a part from a vehicle
+      tags: [Vehicle Parts]
+      responses:
+        '204':
+          description: Part deleted
+  /vehicles/{vehicleId}/parts/{partId}/expiration:
+    parameters:
+      - name: vehicleId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: partId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+    get:
+      summary: Get expiration threshold of a part
+      tags: [Expiration]
+      responses:
+        '200':
+          description: Expiration details for part
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Expiration'
+    put:
+      summary: Update expiration data of a part
+      tags: [Expiration]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ExpirationUpdate'
+      responses:
+        '200':
+          description: Expiration updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Expiration'
+components:
+  schemas:
+    VehicleKey:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        chassisNumber:
+          type: string
+        plate:
+          type: string
+      required: [id, chassisNumber, plate]
+    Vehicle:
+      type: object
+      properties:
+        key:
+          $ref: '#/components/schemas/VehicleKey'
+        model:
+          type: string
+        brand:
+          type: string
+      required: [key, model, brand]
+    VehicleCreate:
+      allOf:
+        - $ref: '#/components/schemas/Vehicle'
+        - type: object
+          properties:
+            key:
+              type: object
+              properties:
+                chassisNumber:
+                  type: string
+                plate:
+                  type: string
+              required: [chassisNumber, plate]
+          required: [model, brand]
+    VehicleUpdate:
+      $ref: '#/components/schemas/VehicleCreate'
+    VehiclePartKey:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        serialNumber:
+          type: string
+          format: uuid
+      required: [serialNumber]
+    VehiclePart:
+      type: object
+      properties:
+        key:
+          $ref: '#/components/schemas/VehiclePartKey'
+        vehicleKey:
+          $ref: '#/components/schemas/VehicleKey'
+        brand:
+          type: string
+        model:
+          type: string
+        expiration:
+          $ref: '#/components/schemas/Expiration'
+      required: [key, vehicleKey, brand, model, expiration]
+    VehiclePartCreate:
+      allOf:
+        - $ref: '#/components/schemas/VehiclePart'
+        - type: object
+          required: [key, brand, model]
+          properties:
+            key:
+              $ref: '#/components/schemas/VehiclePartKey'
+    VehiclePartUpdate:
+      $ref: '#/components/schemas/VehiclePartCreate'
+    ExpirationKey:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        type:
+          type: string
+      required: [id, type]
+    Expiration:
+      type: object
+      properties:
+        key:
+          $ref: '#/components/schemas/ExpirationKey'
+        maxLimitKm:
+          type: integer
+          format: int32
+        warningLimitKm:
+          type: integer
+          format: int32
+      required: [key, maxLimitKm, warningLimitKm]
+    ExpirationUpdate:
+      type: object
+      properties:
+        maxLimitKm:
+          type: integer
+          format: int32
+        warningLimitKm:
+          type: integer
+          format: int32
+      required: [maxLimitKm, warningLimitKm]
