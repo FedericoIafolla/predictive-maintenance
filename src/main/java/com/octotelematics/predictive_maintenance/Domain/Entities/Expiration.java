@@ -1,7 +1,10 @@
 package com.octotelematics.predictive_maintenance.Domain.Entities;
 
+import lombok.Getter;
+
+@Getter
 public class Expiration {
-    ExpirationKey key;
+    private ExpirationKey key;
     private int maxLimitKm;
     private int warningLimitKm;
 
@@ -12,6 +15,10 @@ public class Expiration {
     }
 
     public static Expiration create(ExpirationKey key, int warningLimitKm, int maxLimitKm) {
-        return new Expiration(key, warningLimitKm, maxLimitKm);
+        return new Expiration(key, maxLimitKm, warningLimitKm);
+    }
+
+    public ExpirationKey getKey() {
+        return key;
     }
 }

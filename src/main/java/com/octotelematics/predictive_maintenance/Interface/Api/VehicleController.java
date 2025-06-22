@@ -1,10 +1,9 @@
 package com.octotelematics.predictive_maintenance.Interface.Api;
 
 import com.octotelematics.predictive_maintenance.Application.VehicleAggregateRepository;
-import com.octotelematics.predictive_maintenance.Domain.Entities.VehicleAggregate;
 import com.octotelematics.predictive_maintenance.Domain.UseCases.CreateVehicleUseCase;
-import com.octotelematics.predictive_maintenance.Domain.UseCases.GetAllVehicleUseCase;
-import com.octotelematics.predictive_maintenance.Interface.Dto.CreateVehicleDto;
+
+import com.octotelematics.predictive_maintenance.Interface.Dto.VehicleDto;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -16,17 +15,8 @@ public class VehicleController {
     private final VehicleAggregateRepository repo;
     public VehicleController(VehicleAggregateRepository repo) { this.repo = repo; }
     @PostMapping
-    public void createVehicle(@RequestBody CreateVehicleDto dto) {
+    public void createVehicle(@RequestBody VehicleDto dto) {
         CreateVehicleUseCase.execute(dto, repo);
-    }
-    @GetMapping
-    public List<VehicleAggregate> getAll() {
-        return GetAllVehicleUseCase.execute(repo);
-    }
-
-    @DeleteMapping("/{vehicleId}")
-    public void deleteVehicle(@PathVariable UUID vehicleId) {
-        DeleteVehicleUseCase.execute(vehicleId, repo);
     }
 
 }

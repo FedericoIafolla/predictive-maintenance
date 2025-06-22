@@ -21,6 +21,26 @@ public class VehicleAggregate {
         return new VehicleAggregate(key, model, brand, user, vehicleParts);
     }
 
+    public VehicleKey getKey() {
+        return key;
+    }
+
+    public String getModel() {
+        return model;
+    }
+
+    public String getBrand() {
+        return brand;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public List<VehiclePart> getVehicleParts() {
+        return vehicleParts;
+    }
+
     public void updateUser(User newUser) {
         this.user = newUser;
     }
@@ -33,15 +53,21 @@ public class VehicleAggregate {
         this.vehicleParts.remove(vehiclePart);
     }
 
-    public void updateVehiclePart(VehiclePart newVehiclePart) { // provare a cambiare con la key di vehicle part entrambi update
-        VehiclePart partToDelete = this.vehicleParts.stream().filter(vp->vp.key==newVehiclePart.key).findFirst().orElseThrow();
+    public void updateVehiclePart(VehiclePart newVehiclePart) {
+        VehiclePart partToDelete = this.vehicleParts.stream()
+                .filter(vp -> vp.getKey().equals(newVehiclePart.getKey()))
+                .findFirst()
+                .orElseThrow();
         removeVehiclePart(partToDelete);
         addVehiclePart(newVehiclePart);
     }
 
-    public void updateExpiration(VehiclePart NewPartExpiration, Expiration newExpiration) {
-        VehiclePart partToDelete = this.vehicleParts.stream().filter(vp->vp.key==NewPartExpiration.key).findFirst().orElseThrow();
-        partToDelete.updateExpiration(newExpiration);
+    public void updateExpiration(ExpirationKey expirationKey, Expiration newExpiration) {
+        VehiclePart part = this.vehicleParts.stream()
+                .filter(vp -> vp.getExpiration().getKey().getGianni().equals(expirationKey.getGianni()))
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("VehiclePart not found for expiration update"));
+
+        part.updateExpiration(newExpiration);
     }
 }
-
