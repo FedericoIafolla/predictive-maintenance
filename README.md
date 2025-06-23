@@ -2,19 +2,6 @@
 
 Questo progetto è un servizio di **predictive maintenance** sviluppato in **Spring Boot** seguendo i principi della **Clean Architecture** e del **Domain Driven Design (DDD)**. L'obiettivo è creare un'applicazione modulare, testabile e facilmente estendibile per gestire le manutenzioni predittive di veicoli e componenti.
 
----
-
-## 🖥️ Copia e incolla in IntelliJ
-
-Per utilizzare questo README direttamente in IntelliJ IDEA:
-
-1. Apri il tuo progetto in IntelliJ.
-2. Nella vista **Project**, fai clic destro sulla radice del progetto e seleziona **New » File**.
-3. Assegna al file il nome **README.md** e premi **Invio**.
-4. Apri il nuovo file e incolla il contenuto di questo documento.
-5. IntelliJ evidenzierà automaticamente la sintassi Markdown e potrai visualizzare l'anteprima con **Ctrl+Shift+V** (Windows/Linux) o **⌘⇧V** (macOS).
-
----
 
 ## 🗂️ Struttura del progetto
 
